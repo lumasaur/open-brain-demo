@@ -1,0 +1,752 @@
+[
+  {
+    "node_label": "PORT1",
+    "db_id": 101,
+    "degree": 9,
+    "hub_classification": "hub"
+  },
+  {
+    "node_label": "T1",
+    "db_id": 26,
+    "degree": 8,
+    "hub_classification": "hub"
+  },
+  {
+    "node_label": "CON1",
+    "db_id": 51,
+    "degree": 8,
+    "hub_classification": "hub"
+  },
+  {
+    "node_label": "M1",
+    "db_id": 1,
+    "degree": 8,
+    "hub_classification": "hub"
+  },
+  {
+    "node_label": "PORT22",
+    "db_id": 122,
+    "degree": 8,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "V1",
+    "db_id": 76,
+    "degree": 8,
+    "hub_classification": "hub"
+  },
+  {
+    "node_label": "T3",
+    "db_id": 28,
+    "degree": 7,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "V9",
+    "db_id": 84,
+    "degree": 6,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "M3",
+    "db_id": 3,
+    "degree": 6,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M4",
+    "db_id": 4,
+    "degree": 5,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "T2",
+    "db_id": 27,
+    "degree": 5,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "PORT3",
+    "db_id": 103,
+    "degree": 5,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "CON9",
+    "db_id": 59,
+    "degree": 5,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M7",
+    "db_id": 7,
+    "degree": 5,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON8",
+    "db_id": 58,
+    "degree": 4,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "PORT5",
+    "db_id": 105,
+    "degree": 4,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T8",
+    "db_id": 33,
+    "degree": 4,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "T6",
+    "db_id": 31,
+    "degree": 4,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT4",
+    "db_id": 104,
+    "degree": 4,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT15",
+    "db_id": 115,
+    "degree": 4,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "CON2",
+    "db_id": 52,
+    "degree": 4,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "M9",
+    "db_id": 9,
+    "degree": 3,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON3",
+    "db_id": 53,
+    "degree": 3,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V8",
+    "db_id": 83,
+    "degree": 3,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T16",
+    "db_id": 41,
+    "degree": 3,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT9",
+    "db_id": 109,
+    "degree": 3,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M2",
+    "db_id": 2,
+    "degree": 3,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "V2",
+    "db_id": 77,
+    "degree": 3,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "CON15",
+    "db_id": 65,
+    "degree": 3,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "PORT6",
+    "db_id": 106,
+    "degree": 3,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T7",
+    "db_id": 32,
+    "degree": 3,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M10",
+    "db_id": 10,
+    "degree": 3,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M19",
+    "db_id": 19,
+    "degree": 3,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "V3",
+    "db_id": 78,
+    "degree": 3,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T15",
+    "db_id": 40,
+    "degree": 3,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "CON4",
+    "db_id": 54,
+    "degree": 3,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M5",
+    "db_id": 5,
+    "degree": 3,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "T13",
+    "db_id": 38,
+    "degree": 3,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON20",
+    "db_id": 70,
+    "degree": 3,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "PORT8",
+    "db_id": 108,
+    "degree": 3,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "T11",
+    "db_id": 36,
+    "degree": 3,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V24",
+    "db_id": 99,
+    "degree": 3,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON5",
+    "db_id": 55,
+    "degree": 3,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V16",
+    "db_id": 91,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M18",
+    "db_id": 18,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M24",
+    "db_id": 24,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT18",
+    "db_id": 118,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T22",
+    "db_id": 47,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT12",
+    "db_id": 112,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON10",
+    "db_id": 60,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V10",
+    "db_id": 85,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON21",
+    "db_id": 71,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT11",
+    "db_id": 111,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT21",
+    "db_id": 121,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V14",
+    "db_id": 89,
+    "degree": 2,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "V12",
+    "db_id": 87,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M6",
+    "db_id": 6,
+    "degree": 2,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "CON6",
+    "db_id": 56,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T10",
+    "db_id": 35,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M12",
+    "db_id": 12,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V7",
+    "db_id": 82,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V22",
+    "db_id": 97,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T5",
+    "db_id": 30,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V20",
+    "db_id": 95,
+    "degree": 2,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "T23",
+    "db_id": 48,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V5",
+    "db_id": 80,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT10",
+    "db_id": 110,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M13",
+    "db_id": 13,
+    "degree": 2,
+    "hub_classification": "sub-hub"
+  },
+  {
+    "node_label": "V4",
+    "db_id": 79,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M23",
+    "db_id": 23,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V13",
+    "db_id": 88,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T17",
+    "db_id": 42,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT25",
+    "db_id": 125,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V25",
+    "db_id": 100,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT2",
+    "db_id": 102,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON7",
+    "db_id": 57,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T14",
+    "db_id": 39,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T9",
+    "db_id": 34,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT7",
+    "db_id": 107,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V15",
+    "db_id": 90,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON22",
+    "db_id": 72,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M8",
+    "db_id": 8,
+    "degree": 2,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V23",
+    "db_id": 98,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M11",
+    "db_id": 11,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT16",
+    "db_id": 116,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT23",
+    "db_id": 123,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON19",
+    "db_id": 69,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON13",
+    "db_id": 63,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V19",
+    "db_id": 94,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT14",
+    "db_id": 114,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M22",
+    "db_id": 22,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON18",
+    "db_id": 68,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON23",
+    "db_id": 73,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T19",
+    "db_id": 44,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T4",
+    "db_id": 29,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T18",
+    "db_id": 43,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V11",
+    "db_id": 86,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T12",
+    "db_id": 37,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T21",
+    "db_id": 46,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M20",
+    "db_id": 20,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M21",
+    "db_id": 21,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M15",
+    "db_id": 15,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT24",
+    "db_id": 124,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V18",
+    "db_id": 93,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V21",
+    "db_id": 96,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M14",
+    "db_id": 14,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON17",
+    "db_id": 67,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M25",
+    "db_id": 25,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M17",
+    "db_id": 17,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT17",
+    "db_id": 117,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "M16",
+    "db_id": 16,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V6",
+    "db_id": 81,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T24",
+    "db_id": 49,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON11",
+    "db_id": 61,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON16",
+    "db_id": 66,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "V17",
+    "db_id": 92,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT13",
+    "db_id": 113,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT19",
+    "db_id": 119,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON25",
+    "db_id": 75,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON24",
+    "db_id": 74,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON12",
+    "db_id": 62,
+    "degree": 1,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "PORT20",
+    "db_id": 120,
+    "degree": 0,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T20",
+    "db_id": 45,
+    "degree": 0,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "T25",
+    "db_id": 50,
+    "degree": 0,
+    "hub_classification": "leaf"
+  },
+  {
+    "node_label": "CON14",
+    "db_id": 64,
+    "degree": 0,
+    "hub_classification": "leaf"
+  }
+]
