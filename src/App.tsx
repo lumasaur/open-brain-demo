@@ -166,7 +166,7 @@ export default function App() {
         display: "flex",
         flexDirection: "column",
       }}>
-        <ChatPanel onResults={handleResults} />
+        <ChatPanel onResults={handleResults} onClear={handleClearHighlight} />
       </div>
     </div>
   );

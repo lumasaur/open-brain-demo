@@ -9,6 +9,37 @@ const STARTERS = [
   "What's the VBOD and how does it change decisions?",
 ];
 
+// Rotating pool shown after each assistant response
+const FOLLOW_UP_POOL = [
+  // Architecture & retrieval
+  "How does graph structure improve retrieval?",
+  "How does the 70/30 hybrid search blend vector and text?",
+  "Why store embeddings locally instead of using a cloud vector DB?",
+  "How does FTS5 keyword search complement the vector similarity?",
+  "What's the role of the memory graph — why link nodes at all?",
+  // Comparison & differentiation
+  "What makes this different from a notes app like Notion?",
+  "How is this different from RAG on a document store?",
+  "Could this replace a CRM for a solo consultant?",
+  "Why not just use ChatGPT memory or Claude Projects?",
+  // Design decisions
+  "What happens when two memories contradict each other?",
+  "How do you decide what's worth storing?",
+  "What would you add if you rebuilt this from scratch?",
+  "What's the hardest part of building persistent AI memory?",
+  "How do you prevent the memory store from getting noisy over time?",
+  // Practical use & workflow
+  "Walk me through how the VBOD personas work together",
+  "How does decision logging change the way you work?",
+  "What does a typical week look like using this system?",
+  "How would you scale this to a whole team?",
+  "What kind of person would benefit most from this system?",
+  // Technical depth
+  "How are the embeddings generated and why all-MiniLM-L6-v2?",
+  "What does the SQLite schema look like under the hood?",
+  "How does the streaming chat endpoint work?",
+];
+
 const DOMAIN_BADGE_COLORS: Record<string, string> = {
   meta: "#6366f1",
   technical: "#06b6d4",
@@ -20,6 +51,7 @@ const DOMAIN_BADGE_COLORS: Record<string, string> = {
 
 interface Props {
   onResults: (results: SearchResult[]) => void;
+  onClear: () => void;
 }
 
 function SourceBadge({ result }: { result: SearchResult }) {
@@ -45,16 +77,55 @@ function SourceBadge({ result }: { result: SearchResult }) {
   );
 }
 
-export default function ChatPanel({ onResults }: Props) {
+function FollowUpChip({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        background: "transparent",
+        border: "1px solid #334155",
+        borderRadius: "20px",
+        color: "#64748b",
+        padding: "4px 10px",
+        fontSize: "11px",
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+        transition: "all 0.15s",
+        flexShrink: 0,
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = "#6366f1";
+        e.currentTarget.style.color = "#a5b4fc";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "#334155";
+        e.currentTarget.style.color = "#64748b";
+      }}
+    >
+      {label}
+    </button>
+  );
+}
+
+function pickFollowUps(used: Set<string>, count = 3): string[] {
+  const available = FOLLOW_UP_POOL.filter((q) => !used.has(q));
+  const pool = available.length >= count ? available : FOLLOW_UP_POOL;
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
+
+export default function ChatPanel({ onResults, onClear }: Props) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [usedQuestions, setUsedQuestions] = useState<Set<string>>(new Set(STARTERS));
+  const [followUps, setFollowUps] = useState<string[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, followUps]);
 
   const buildContext = useCallback((results: SearchResult[]): string => {
     return results
@@ -66,17 +137,17 @@ export default function ChatPanel({ onResults }: Props) {
     if (!query.trim() || loading) return;
     setInput("");
     setLoading(true);
+    setFollowUps([]); // Clear follow-ups while streaming
 
-    // Add user message
+    const nextUsed = new Set([...usedQuestions, query]);
+    setUsedQuestions(nextUsed);
     setMessages((prev) => [...prev, { role: "user", content: query }]);
 
     try {
-      // Retrieve context
       const results: SearchResult[] = await search(query, 5);
       onResults(results);
       const context = buildContext(results);
 
-      // Streaming assistant response
       let assistantContent = "";
       setMessages((prev) => [
         ...prev,
@@ -92,16 +163,16 @@ export default function ChatPanel({ onResults }: Props) {
             const updated = [...prev];
             const last = updated[updated.length - 1];
             if (last.role === "assistant") {
-              updated[updated.length - 1] = {
-                ...last,
-                content: assistantContent,
-              };
+              updated[updated.length - 1] = { ...last, content: assistantContent };
             }
             return updated;
           });
         },
         abortRef.current?.signal
       );
+
+      // Show follow-ups after response completes
+      setFollowUps(pickFollowUps(nextUsed));
     } catch (err) {
       if ((err as Error).name !== "AbortError") {
         setMessages((prev) => [
@@ -117,10 +188,20 @@ export default function ChatPanel({ onResults }: Props) {
     }
   }, [loading, buildContext, onResults]);
 
+  const handleClear = useCallback(() => {
+    setMessages([]);
+    setFollowUps([]);
+    setUsedQuestions(new Set(STARTERS));
+    onResults([]);
+    onClear();
+  }, [onResults, onClear]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     send(input);
   };
+
+  const hasMessages = messages.length > 0;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%", background: "#111827" }}>
@@ -129,6 +210,9 @@ export default function ChatPanel({ onResults }: Props) {
         padding: "16px 20px",
         borderBottom: "1px solid #1e293b",
         flexShrink: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <div style={{
@@ -142,6 +226,26 @@ export default function ChatPanel({ onResults }: Props) {
             125 nodes · hybrid retrieval
           </span>
         </div>
+
+        {hasMessages && (
+          <button
+            onClick={handleClear}
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "#475569",
+              fontSize: "12px",
+              cursor: "pointer",
+              padding: "4px 8px",
+              borderRadius: "4px",
+              transition: "color 0.15s",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "#94a3b8"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "#475569"; }}
+          >
+            Clear
+          </button>
+        )}
       </div>
 
       {/* Messages */}
@@ -153,7 +257,7 @@ export default function ChatPanel({ onResults }: Props) {
         flexDirection: "column",
         gap: "16px",
       }}>
-        {messages.length === 0 && (
+        {!hasMessages && (
           <div style={{ marginTop: "auto", paddingBottom: "24px" }}>
             <p style={{ color: "#64748b", fontSize: "13px", marginBottom: "12px", textAlign: "center" }}>
               Ask anything about this memory system
@@ -227,6 +331,19 @@ export default function ChatPanel({ onResults }: Props) {
             )}
           </div>
         ))}
+
+        {/* Follow-up suggestions — shown after last response completes */}
+        {followUps.length > 0 && !loading && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px", paddingTop: "4px" }}>
+            <span style={{ color: "#475569", fontSize: "11px" }}>Keep exploring:</span>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+              {followUps.map((q) => (
+                <FollowUpChip key={q} label={q} onClick={() => send(q)} />
+              ))}
+            </div>
+          </div>
+        )}
+
         <div ref={bottomRef} />
       </div>
 
