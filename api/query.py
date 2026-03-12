@@ -10,7 +10,7 @@ Functions:
 
 Usage (standalone):
   python query.py --test   # Run validation queries
-  python query.py --serve  # Start FastAPI server (optional)
+  uvicorn api.query:app    # Start FastAPI server (Railway / local)
 """
 
 import sqlite3
@@ -19,8 +19,16 @@ import os
 import struct
 import math
 import argparse
+from pathlib import Path
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "ob_demo.db")
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
+import anthropic
+import uvicorn
+
+DB_PATH = Path(__file__).parent.parent / "data" / "ob_demo.db"
 
 # ---------------------------------------------------------------------------
 # EMBEDDING HELPER
@@ -242,6 +250,82 @@ def get_graph_data() -> dict:
 
 
 # ---------------------------------------------------------------------------
+# FASTAPI APP (module-level — required for uvicorn api.query:app)
+# ---------------------------------------------------------------------------
+
+app = FastAPI(title="Open Brain Demo API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://open-brain-demo.vercel.app",
+        "http://localhost:5173",
+        "http://localhost:8000",
+    ],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
+)
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+
+@app.get("/graph")
+def graph_endpoint():
+    return get_graph_data()
+
+
+@app.get("/node/{node_id}")
+def node_endpoint(node_id: int):
+    return get_node(node_id)
+
+
+@app.get("/search")
+def search_endpoint(q: str, limit: int = 5):
+    return {"results": search_demo(q, limit)}
+
+
+class ChatRequest(BaseModel):
+    query: str
+    context: str
+
+
+SYSTEM_PROMPT = """You are the Open Brain demo assistant. You answer questions about an AI-powered
+persistent memory system called Open Brain, grounded strictly in the provided memory excerpts.
+
+Rules:
+- Answer concisely and specifically based on the memory context.
+- If the context doesn't contain relevant information, say so briefly.
+- Do not invent facts not in the provided context.
+- Write in a clear, direct tone — this is a portfolio demo.
+- Keep responses under 250 words unless a detailed explanation is genuinely needed."""
+
+
+def sse_stream(query: str, context: str):
+    client = anthropic.Anthropic()
+    prompt = f"""Memory context:\n{context}\n\nQuestion: {query}"""
+    with client.messages.stream(
+        model="claude-sonnet-4-6",
+        max_tokens=512,
+        system=SYSTEM_PROMPT,
+        messages=[{"role": "user", "content": prompt}],
+    ) as stream:
+        for text in stream.text_stream:
+            yield f"data: {text}\n\n"
+    yield "data: [DONE]\n\n"
+
+
+@app.post("/chat")
+def chat_endpoint(req: ChatRequest):
+    return StreamingResponse(
+        sse_stream(req.query, req.context),
+        media_type="text/event-stream",
+    )
+
+
+# ---------------------------------------------------------------------------
 # VALIDATION — 4 SAMPLE QUERIES
 # ---------------------------------------------------------------------------
 
@@ -282,82 +366,6 @@ def run_validation():
 
 
 # ---------------------------------------------------------------------------
-# OPTIONAL FASTAPI SERVER
-# ---------------------------------------------------------------------------
-
-def run_server():
-    try:
-        from fastapi import FastAPI
-        from fastapi.middleware.cors import CORSMiddleware
-        from fastapi.responses import StreamingResponse
-        from pydantic import BaseModel
-        import anthropic
-        import uvicorn
-    except ImportError:
-        print("FastAPI/uvicorn/anthropic not installed.")
-        print("Run: pip install fastapi uvicorn anthropic")
-        return
-
-    app = FastAPI(title="Open Brain Demo API")
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-
-    @app.get("/graph")
-    def graph_endpoint():
-        return get_graph_data()
-
-    @app.get("/node/{node_id}")
-    def node_endpoint(node_id: int):
-        return get_node(node_id)
-
-    @app.get("/search")
-    def search_endpoint(q: str, limit: int = 5):
-        return {"results": search_demo(q, limit)}
-
-    class ChatRequest(BaseModel):
-        query: str
-        context: str
-
-    SYSTEM_PROMPT = """You are the Open Brain demo assistant. You answer questions about an AI-powered
-persistent memory system called Open Brain, grounded strictly in the provided memory excerpts.
-
-Rules:
-- Answer concisely and specifically based on the memory context.
-- If the context doesn't contain relevant information, say so briefly.
-- Do not invent facts not in the provided context.
-- Write in a clear, direct tone — this is a portfolio demo.
-- Keep responses under 250 words unless a detailed explanation is genuinely needed."""
-
-    def sse_stream(query: str, context: str):
-        client = anthropic.Anthropic()
-        prompt = f"""Memory context:\n{context}\n\nQuestion: {query}"""
-        with client.messages.stream(
-            model="claude-sonnet-4-6",
-            max_tokens=512,
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": prompt}],
-        ) as stream:
-            for text in stream.text_stream:
-                yield f"data: {text}\n\n"
-        yield "data: [DONE]\n\n"
-
-    @app.post("/chat")
-    def chat_endpoint(req: ChatRequest):
-        return StreamingResponse(
-            sse_stream(req.query, req.context),
-            media_type="text/event-stream",
-        )
-
-    port = int(os.environ.get("PORT", 8000))
-    print(f"Starting API server at http://0.0.0.0:{port}")
-    uvicorn.run(app, host="0.0.0.0", port=port)
-
-
-# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
@@ -368,6 +376,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.serve:
-        run_server()
+        port = int(os.environ.get("PORT", 8000))
+        print(f"Starting API server at http://0.0.0.0:{port}")
+        uvicorn.run(app, host="0.0.0.0", port=port)
     else:
         run_validation()
