@@ -5,6 +5,16 @@ import Legend from "./components/Legend";
 import { fetchGraph } from "./api";
 import type { GraphData, GraphNode, SearchResult } from "./types";
 
+const DOMAIN_FILTERS = [
+  { key: null, label: "All" },
+  { key: "meta", label: "Meta" },
+  { key: "technical", label: "Technical" },
+  { key: "consulting", label: "Consulting" },
+  { key: "vbod", label: "VBOD" },
+  { key: "portfolio", label: "Portfolio" },
+  { key: "personal", label: "Personal" },
+];
+
 export default function App() {
   const [graphData, setGraphData] = useState<GraphData>({ nodes: [], links: [] });
   const [loading, setLoading] = useState(true);
@@ -12,6 +22,7 @@ export default function App() {
   const [highlightIds, setHighlightIds] = useState<Set<number>>(new Set());
   const [connectedIds, setConnectedIds] = useState<Set<number>>(new Set());
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
+  const [filterDomain, setFilterDomain] = useState<string | null>(null);
 
   useEffect(() => {
     fetchGraph()
@@ -130,6 +141,7 @@ export default function App() {
             data={graphData}
             highlightIds={highlightIds}
             connectedIds={connectedIds}
+            filterDomain={filterDomain}
             onNodeClick={handleNodeClick}
           />
         )}
@@ -145,6 +157,52 @@ export default function App() {
             </span>
           )}
         </div>
+
+        {/* Domain filter chips */}
+        {!loading && !error && (
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: "absolute", top: "42px", left: "16px",
+              display: "flex", flexWrap: "wrap", gap: "5px",
+              maxWidth: "calc(100% - 32px)",
+            }}
+          >
+            {DOMAIN_FILTERS.map(({ key, label }) => {
+              const active = filterDomain === key;
+              return (
+                <button
+                  key={label}
+                  onClick={() => setFilterDomain(active ? null : key)}
+                  style={{
+                    background: active ? "#6366f122" : "transparent",
+                    border: `1px solid ${active ? "#6366f1" : "#334155"}`,
+                    borderRadius: "14px",
+                    color: active ? "#a5b4fc" : "#64748b",
+                    padding: "2px 9px",
+                    fontSize: "11px",
+                    cursor: "pointer",
+                    transition: "all 0.15s",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!active) {
+                      e.currentTarget.style.borderColor = "#6366f188";
+                      e.currentTarget.style.color = "#94a3b8";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!active) {
+                      e.currentTarget.style.borderColor = "#334155";
+                      e.currentTarget.style.color = "#64748b";
+                    }
+                  }}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        )}
 
         {selectedNode && (
           <div

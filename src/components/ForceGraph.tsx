@@ -6,6 +6,7 @@ interface Props {
   data: GraphData;
   highlightIds: Set<number>;
   connectedIds: Set<number>;
+  filterDomain: string | null;
   onNodeClick: (node: GraphNode) => void;
 }
 
@@ -26,7 +27,7 @@ function nodeRadius(degree: number): number {
   return Math.max(4, Math.min(14, 4 + degree * 0.7));
 }
 
-export default function ForceGraph({ data, highlightIds, connectedIds, onNodeClick }: Props) {
+export default function ForceGraph({ data, highlightIds, connectedIds, filterDomain, onNodeClick }: Props) {
   const svgRef = useRef<SVGSVGElement>(null);
   const simRef = useRef<d3.Simulation<GraphNode, GraphLink> | null>(null);
 
@@ -166,7 +167,7 @@ export default function ForceGraph({ data, highlightIds, connectedIds, onNodeCli
     };
   }, [data, handleClick]);
 
-  // Highlight effect — separate from layout to avoid re-simulation
+  // Highlight + domain filter effect — separate from layout to avoid re-simulation
   useEffect(() => {
     if (!svgRef.current) return;
     const svg = d3.select(svgRef.current);
@@ -176,10 +177,13 @@ export default function ForceGraph({ data, highlightIds, connectedIds, onNodeCli
       .transition()
       .duration(300)
       .attr("opacity", (d) => {
-        if (!anyHighlight) return 1;
-        if (highlightIds.has(d.id)) return 1;
-        if (connectedIds.has(d.id)) return 0.5;
-        return 0.15;
+        const matchesDomain = filterDomain === null || d.domain === filterDomain;
+        if (anyHighlight) {
+          if (highlightIds.has(d.id)) return 1;
+          if (connectedIds.has(d.id)) return matchesDomain ? 0.5 : 0.15;
+          return matchesDomain ? 0.15 : 0.05;
+        }
+        return matchesDomain ? 1 : 0.1;
       })
       .attr("stroke-width", (d) => highlightIds.has(d.id) ? 2.5 : 0.8)
       .attr("stroke", (d) => highlightIds.has(d.id) ? "#ffffff" : "#0f172a");
@@ -188,7 +192,7 @@ export default function ForceGraph({ data, highlightIds, connectedIds, onNodeCli
       .transition()
       .duration(300)
       .attr("stroke-opacity", () => anyHighlight ? 0.15 : 0.5);
-  }, [highlightIds, connectedIds]);
+  }, [highlightIds, connectedIds, filterDomain]);
 
   return (
     <svg
