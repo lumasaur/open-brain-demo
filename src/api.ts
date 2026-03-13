@@ -24,13 +24,15 @@ export async function search(query: string, limit = 5) {
 export async function streamChat(
   query: string,
   context: string,
+  nodeIds: number[],
   onChunk: (text: string) => void,
+  onHighlight?: (ids: number[]) => void,
   signal?: AbortSignal
 ): Promise<void> {
   const res = await fetch(`${BASE}/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query, context }),
+    body: JSON.stringify({ query, context, node_ids: nodeIds }),
     signal,
   });
 
@@ -44,9 +46,15 @@ export async function streamChat(
     const { done, value } = await reader.read();
     if (done) break;
     const chunk = decoder.decode(value, { stream: true });
-    // Parse SSE lines: "data: <text>\n\n"
+    // Parse SSE lines — three event types:
+    //   "data: NODES:[1,2,3]"  → graph highlight
+    //   "data: <text>"         → LLM chunk
+    //   "data: [DONE]"         → sentinel
     for (const line of chunk.split("\n")) {
-      if (line.startsWith("data: ")) {
+      if (line.startsWith("data: NODES:")) {
+        const ids = JSON.parse(line.slice(12)) as number[];
+        onHighlight?.(ids);
+      } else if (line.startsWith("data: ")) {
         const text = line.slice(6);
         if (text !== "[DONE]") onChunk(text);
       }

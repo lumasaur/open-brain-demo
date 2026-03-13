@@ -51,6 +51,7 @@ const DOMAIN_BADGE_COLORS: Record<string, string> = {
 
 interface Props {
   onResults: (results: SearchResult[]) => void;
+  onHighlight?: (ids: number[]) => void;
   onClear: () => void;
 }
 
@@ -114,7 +115,7 @@ function pickFollowUps(used: Set<string>, count = 3): string[] {
   return shuffled.slice(0, count);
 }
 
-export default function ChatPanel({ onResults, onClear }: Props) {
+export default function ChatPanel({ onResults, onHighlight, onClear }: Props) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -147,6 +148,7 @@ export default function ChatPanel({ onResults, onClear }: Props) {
       const results: SearchResult[] = await search(query, 5);
       onResults(results);
       const context = buildContext(results);
+      const nodeIds = results.map((r) => r.id);
 
       let assistantContent = "";
       setMessages((prev) => [
@@ -157,6 +159,7 @@ export default function ChatPanel({ onResults, onClear }: Props) {
       await streamChat(
         query,
         context,
+        nodeIds,
         (chunk) => {
           assistantContent += chunk;
           setMessages((prev) => {
@@ -168,6 +171,7 @@ export default function ChatPanel({ onResults, onClear }: Props) {
             return updated;
           });
         },
+        onHighlight,
         abortRef.current?.signal
       );
 

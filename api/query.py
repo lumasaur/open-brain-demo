@@ -259,6 +259,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://open-brain-demo.vercel.app",
+        "https://jonlum.vercel.app",
         "http://localhost:5173",
         "http://localhost:8000",
     ],
@@ -287,9 +288,21 @@ def search_endpoint(q: str, limit: int = 5):
     return {"results": search_demo(q, limit)}
 
 
+class SearchRequest(BaseModel):
+    query: str
+    limit: int = 3
+
+
+@app.post("/search")
+async def search_post(req: SearchRequest):
+    results = search_demo(req.query, req.limit)
+    return {"results": results}
+
+
 class ChatRequest(BaseModel):
     query: str
     context: str
+    node_ids: list[int] = []  # IDs of context nodes — emitted as NODES: before stream
 
 
 SYSTEM_PROMPT = """You are the Open Brain demo assistant. You answer questions about an AI-powered
@@ -303,7 +316,10 @@ Rules:
 - Keep responses under 250 words unless a detailed explanation is genuinely needed."""
 
 
-def sse_stream(query: str, context: str):
+def sse_stream(query: str, context: str, node_ids: list[int]):
+    # Emit node IDs first so the graph highlights the moment Claude starts responding
+    if node_ids:
+        yield f"data: NODES:{json.dumps(node_ids)}\n\n"
     client = anthropic.Anthropic()
     prompt = f"""Memory context:\n{context}\n\nQuestion: {query}"""
     with client.messages.stream(
@@ -320,7 +336,7 @@ def sse_stream(query: str, context: str):
 @app.post("/chat")
 def chat_endpoint(req: ChatRequest):
     return StreamingResponse(
-        sse_stream(req.query, req.context),
+        sse_stream(req.query, req.context, req.node_ids),
         media_type="text/event-stream",
     )
 

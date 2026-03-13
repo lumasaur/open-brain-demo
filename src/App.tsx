@@ -61,6 +61,22 @@ export default function App() {
     setConnectedIds(new Set(connected));
   }, [adjacencyMap]);
 
+  const handleHighlight = useCallback((ids: number[]) => {
+    const idSet = new Set(ids);
+    setHighlightIds(idSet);
+    const connected = new Set<number>();
+    for (const id of idSet) {
+      const neighbors = adjacencyMap.get(id);
+      if (neighbors) {
+        for (const n of neighbors) {
+          if (!idSet.has(n)) connected.add(n);
+        }
+      }
+    }
+    setConnectedIds(connected);
+    setSelectedNode(null);
+  }, [adjacencyMap]);
+
   const handleClearHighlight = useCallback(() => {
     setHighlightIds(new Set());
     setConnectedIds(new Set());
@@ -166,7 +182,7 @@ export default function App() {
         display: "flex",
         flexDirection: "column",
       }}>
-        <ChatPanel onResults={handleResults} onClear={handleClearHighlight} />
+        <ChatPanel onResults={handleResults} onHighlight={handleHighlight} onClear={handleClearHighlight} />
       </div>
     </div>
   );
